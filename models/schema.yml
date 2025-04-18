@@ -1,82 +1,133 @@
 version: 2
 
-models:
-  - name: customers
-    description: This table has basic information about a customer, as well as some derived facts based on a customer's orders
-
+seeds:
+  - name: raw_categories
+    description: Seed table fsor raw_categories
     columns:
-      - name: customer_id
-        description: This is a unique identifier for a customer
+      - name: categoryID
         tests:
-          - unique
+          - not_null
+      - name: categoryName
+        tests:
           - not_null
 
-      - name: first_name
-        description: Customer's first name. PII.
-
-      - name: last_name
-        description: Customer's last name. PII.
-
-      - name: first_order
-        description: Date (UTC) of a customer's first order
-
-      - name: most_recent_order
-        description: Date (UTC) of a customer's most recent order
-
-      - name: number_of_orders
-        description: Count of the number of orders a customer has placed
-
-      - name: total_order_amount
-        description: Total value (AUD) of a customer's orders
-
-  - name: orders
-    description: This table has basic information about orders, as well as some derived facts based on payments
-
+  - name: raw_cities
+    description: Seed table for raw_citiess
     columns:
-      - name: order_id
-        tests:
-          - unique
-          - not_null
-        description: This is a unique identifier for an order
-
-      - name: customer_id
-        description: Foreign key to the customers table
+      - name: CityID
         tests:
           - not_null
-          - relationships:
-              to: ref('customers')
-              field: customer_id
-
-      - name: order_date
-        description: Date (UTC) that the order was placed
-
-      - name: status
-        description: '{{ doc("orders_status") }}'
+      - name: CityName
         tests:
-          - accepted_values:
-              values: ['placed', 'shipped', 'completed', 'return_pending', 'returned']
-
-      - name: amount
-        description: Total amount (AUD) of the order
+          - not_null
+      - name: Zipcode
+        tests:
+          - not_null
+      - name: CountryID
         tests:
           - not_null
 
-      - name: credit_card_amount
-        description: Amount of the order (AUD) paid for by credit card
+  - name: raw_countries
+    description: Seed table for raw_countries
+    columns:
+      - name: CountryID
+        tests:
+          - not_null
+      - name: CountryName
+        tests:
+          - not_null
+      - name: CountryCode
         tests:
           - not_null
 
-      - name: coupon_amount
-        description: Amount of the order (AUD) paid for by coupon
+#  - name: raw_customers
+
+  - name: raw_employees
+    description: Seed table for raw_employees
+    columns:
+      - name: EmployeeID
+        tests:
+          - not_null
+      - name: FirstName
+        tests:
+          - not_null
+      - name: MiddleInitial
+        tests:
+          - not_null
+      - name: LastName
+        tests:
+          - not_null
+      - name: BirthDate
+        tests:
+          - not_null
+      - name: Gender
+        tests:
+          - not_null
+      - name: CityID
+        tests:
+          - not_null
+      - name: HireDate
         tests:
           - not_null
 
-      - name: bank_transfer_amount
-        description: Amount of the order (AUD) paid for by bank transfer
+  - name: raw_products
+    description: Seed table for raw_products
+    columns:
+      - name: ProductID
+        tests:
+          - not_null
+      - name: ProductName
+        tests:
+          - not_null
+      - name: Price
+        tests:
+          - not_null
+      - name: CategoryID
+        tests:
+          - not_null
+      - name: Class
+        tests:
+          - not_null
+      - name: ModifyDate
+        tests:
+          - not_null
+      - name: Resistant
+        tests:
+          - not_null
+      - name: IsAllergic
+        tests:
+          - not_null
+      - name: VitalityDays
         tests:
           - not_null
 
-      - name: gift_card_amount
-        description: Amount of the order (AUD) paid for by gift card
-        tests:
-          - not_null
+#  - name: raw_sales
+#    description: Seed table for raw_sales
+#    columns:
+#      - name: SalesID
+#        tests:
+#          - not_null
+#      - name: SalesPersonID
+#        tests:
+#          - not_null
+#      - name: CustomerID
+#        tests:
+#          - not_null
+#      - name: ProductID
+#        tests:
+#          - not_null
+#      - name: Quantity
+#        tests:
+#          - not_null
+#      - name: Discount
+#        tests:
+#          - not_null
+#      - name: TotalPrice
+#        tests:
+#          - not_null
+#      - name: SalesDate
+##        tests:
+##          - not_null
+#      - name: TransactionNumber
+#        tests:
+#          - not_null

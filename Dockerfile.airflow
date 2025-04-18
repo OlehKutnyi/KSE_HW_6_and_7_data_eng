@@ -1,0 +1,11 @@
+FROM apache/airflow:2.7.1-python3.9
+
+USER airflow
+
+# Встановлюємо пакети в окруження airflow-користувача
+RUN pip install --no-cache-dir \
+    duckdb \
+    pandas \
+    boto3 \
+    dbt-core \
+    dbt-duckdb

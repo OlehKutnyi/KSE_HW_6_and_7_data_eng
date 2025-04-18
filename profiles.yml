@@ -1,8 +1,6 @@
-jaffle_shop:
-
-  target: dev
+grocery_sales:
   outputs:
     dev:
       type: duckdb
-      path: 'jaffle_shop.duckdb'
-      threads: 24
+      path: airflow/db/grocery_sales.duckdb
+  target: dev

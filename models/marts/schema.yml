@@ -1,0 +1,225 @@
+version: 2
+
+models:
+  - name: sales_aggregation
+    description: >
+      Mart model containing daily aggregation of sales per product.
+      Includes number of sales, total revenue, average check, and
+      product reference data from `products`.
+
+    columns:
+      - name: sales_date
+        description: The date of sale
+#        tests:
+#          - not_null
+
+      - name: product_id
+        description: Unique product identifier
+        tests:
+          - not_null
+          - relationships:
+              to: ref('stg_products')
+              field: product_id
+
+      - name: product_name
+        description: Name of the product
+        tests:
+          - not_null
+
+      - name: category_id
+        description: Product category identifier
+        tests:
+          - not_null
+
+      - name: sales_count
+        description: Number of sales (number of rows in `sales`)
+        tests:
+          - not_null
+
+      - name: total_quantity
+        description: Total quantity of units sold
+        tests:
+          - not_null
+
+      - name: total_revenue
+        description: Total revenue from product sales
+        tests:
+          - not_null
+
+      - name: avg_check
+        description: Average check per sale
+        tests:
+          - not_null
+
+      - name: avg_unit_price
+        description: Average unit price from the `products` table
+        tests:
+          - not_null
+
+  - name: sales
+    description: Staged sales data with correct total_price calculation using product prices
+    columns:
+      - name: sales_id
+        description: Unique ID of the sale
+        tests:
+          - not_null
+          - unique
+
+      - name: product_id
+        description: Reference to the sold product
+        tests:
+          - not_null
+
+      - name: quantity
+        description: Quantity of the product sold
+        tests:
+          - not_null
+
+      - name: price
+        description: Price per unit, fetched from products
+#        tests:
+#          - not_null
+
+      - name: total_price
+        description: Correctly calculated total sale amount (price * quantity)
+        tests:
+          - not_null
+
+
+#  - name: customers
+#    description: Cleaned and transformed customer data from raw_customers table.
+#
+#    columns:
+#      - name: customer_id
+#        description: Unique identifier of the customer
+#        tests:
+#          - not_null
+#          - unique
+#
+#      - name: first_name
+#        description: First name of the customer
+#        tests:
+#          - not_null
+#
+#      - name: middle_initial
+#        description: Middle initial of the customer
+#        tests:
+#          - not_null
+#
+#      - name: last_name
+#        description: Last name of the customer
+#        tests:
+#          - not_null
+#
+#      - name: city_id
+#        description: Identifier of the customer's city
+#        tests:
+#          - not_null
+#
+#      - name: address
+#        description: Full address of the customer
+#        tests:
+#          - not_null
+
+
+
+  - name: sales_daily
+    description: >
+      Daily summary of all sales including total number of sales,
+      total revenue, and average check per day.
+    columns:
+      - name: date
+        description: The date of sales
+        tests:
+          - not_null
+      - name: sales_count
+        description: Number of sales per day
+        tests:
+          - not_null
+      - name: total_revenue
+        description: Total revenue per day
+        tests:
+          - not_null
+      - name: avg_check
+        description: Average check per sale on that day
+        tests:
+          - not_null
+
+  - name: top_selling_products
+    description: >
+      Daily ranking of products based on revenue.
+      Includes only top 5 products per day based on revenue.
+    columns:
+      - name: date
+        description: The date of the sale
+        tests:
+          - not_null
+      - name: product_id
+        description: ID of the product sold
+        tests:
+          - not_null
+      - name: daily_revenue
+        description: Total revenue for the product on the given day
+        tests:
+          - not_null
+      - name: revenue_rank
+        description: Product's rank by revenue on that day
+        tests:
+          - not_null
+
+  - name: cashier_statistics
+    description: >
+      Designed to evaluate the performance of workers.
+      Contains sales of each person by date and city
+    columns:
+      - name: sales_person_id
+        description: Salesperson identifier
+        tests:
+          - not_null
+
+      - name: city_name
+        description: Name of the city where salesperson is located
+        tests:
+          - not_null
+
+      - name: date
+        description: Date of the sale
+        tests:
+          - not_null
+
+      - name: total_quantity
+        description: Total quantity of products sold
+
+      - name: total_revenue
+        description: Total revenue from the sales
+
+  - name: sales_incremental
+    description: >
+      Incremental model for tracking individual sales events with unique `sales_id`.
+      On each run, it adds only new rows with sales_date greater than the max in table.
+    columns:
+      - name: sales_id
+        description: Unique identifier for the sale.
+        tests:
+          - not_null
+          - unique
+
+      - name: date
+        description: Date of the sale.
+        tests:
+          - not_null
+
+      - name: product_id
+        description: Product identifier
+
+      - name: customer_id
+        description: Customer identifier
+
+      - name: quantity
+        description: Number of units sold
+
+      - name: discount
+        description: Applied discount
+
+      - name: total_price
+        description: Final price after discount
